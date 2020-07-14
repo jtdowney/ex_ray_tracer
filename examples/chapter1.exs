@@ -7,11 +7,19 @@ defmodule Chapter1 do
     velocity = velocity |> add(gravity) |> add(wind)
     %{position: position, velocity: velocity}
   end
+
+  def projectile(position, velocity) do
+    %{position: position, velocity: velocity}
+  end
+
+  def environment(gravity, wind) do
+    %{gravity: gravity, wind: wind}
+  end
 end
 
-p = %{position: point(0, 1, 0), velocity: vector(1, 1, 0) |> normalize()}
-e = %{gravity: vector(0, -0.1, 0), wind: vector(-0.01, 0, 0)}
+p = Chapter1.projectile(point(0, 1, 0), vector(1, 1, 0) |> normalize())
+e = Chapter1.environment(vector(0, -0.1, 0), vector(-0.01, 0, 0))
 
 Stream.iterate(p, fn prev -> Chapter1.tick(e, prev) end)
-|> Enum.take_while(fn p -> p.position.y > 0 end)
+|> Enum.take_while(fn %{position: {_, y, _, _}} -> y > 0 end)
 |> IO.inspect()

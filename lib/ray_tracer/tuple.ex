@@ -1,19 +1,24 @@
 defmodule RayTracer.Tuple do
-  @type t :: %{x: float, y: float, z: float, w: float}
+  @type t :: {float, float, float, float}
 
   @spec approx_eq(t, t) :: boolean
-  def approx_eq(a, b) do
+  def approx_eq({ax, ay, az, aw}, {bx, by, bz, bw}) do
     epsilon = RayTracer.epsilon()
-    xdiff = abs(a.x - b.x)
-    ydiff = abs(a.y - b.y)
-    zdiff = abs(a.z - b.z)
-    wdiff = abs(a.w - b.w)
+    xdiff = abs(ax - bx)
+    ydiff = abs(ay - by)
+    zdiff = abs(az - bz)
+    wdiff = abs(aw - bw)
     xdiff <= epsilon && ydiff <= epsilon && zdiff <= epsilon && wdiff <= epsilon
   end
 
   @spec tuple(float, float, float, float) :: t
   def tuple(x, y, z, w) do
-    %{x: x, y: y, z: z, w: w}
+    {x, y, z, w}
+  end
+
+  @spec color(float, float, float) :: t
+  def color(red, green, blue) do
+    tuple(red, green, blue, 0.0)
   end
 
   @spec point(float, float, float) :: t
@@ -27,37 +32,42 @@ defmodule RayTracer.Tuple do
   end
 
   @spec add(t, t) :: t
-  def add(a, b) do
-    tuple(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)
+  def add({ax, ay, az, aw}, {bx, by, bz, bw}) do
+    tuple(ax + bx, ay + by, az + bz, aw + bw)
   end
 
   @spec sub(t, t) :: t
-  def sub(a, b) do
-    tuple(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w)
+  def sub({ax, ay, az, aw}, {bx, by, bz, bw}) do
+    tuple(ax - bx, ay - by, az - bz, aw - bw)
+  end
+
+  @spec hadamard_product(t, t) :: t
+  def hadamard_product({ax, ay, az, aw}, {bx, by, bz, bw}) do
+    tuple(ax * bx, ay * by, az * bz, aw * bw)
   end
 
   @spec negate(t) :: t
-  def negate(a) do
-    tuple(-a.x, -a.y, -a.z, -a.w)
+  def negate({x, y, z, w}) do
+    tuple(-x, -y, -z, -w)
   end
 
   @spec scalar_mult(t, float) :: t
-  def scalar_mult(a, n) do
-    tuple(a.x * n, a.y * n, a.z * n, a.w * n)
+  def scalar_mult({x, y, z, w}, n) do
+    tuple(x * n, y * n, z * n, w * n)
   end
 
   @spec scalar_div(t, float) :: t
-  def scalar_div(a, n) do
-    tuple(a.x / n, a.y / n, a.z / n, a.w / n)
+  def scalar_div({x, y, z, w}, n) when n != 0 do
+    tuple(x / n, y / n, z / n, w / n)
   end
 
   @spec is_point?(t) :: boolean
-  def is_point?(t) do
-    t.w == 1.0
+  def is_point?({_, _, _, w}) do
+    w == 1.0
   end
 
   @spec is_vector?(t) :: boolean
-  def is_vector?(t) do
-    t.w == 0.0
+  def is_vector?({_, _, _, w}) do
+    w == 0.0
   end
 end

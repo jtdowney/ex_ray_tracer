@@ -7,20 +7,22 @@ defmodule RayTracer.TupleTest do
 
   test "tuple with w=1.0 is a point" do
     a = tuple(4.3, -4.2, 3.1, 1.0)
-    assert_in_delta a.x, 4.3, epsilon()
-    assert_in_delta a.y, -4.2, epsilon()
-    assert_in_delta a.z, 3.1, epsilon()
-    assert_in_delta a.w, 1.0, epsilon()
+    {x, y, z, w} = a
+    assert_in_delta x, 4.3, epsilon()
+    assert_in_delta y, -4.2, epsilon()
+    assert_in_delta z, 3.1, epsilon()
+    assert_in_delta w, 1.0, epsilon()
     assert is_point?(a)
     refute is_vector?(a)
   end
 
   test "tuple with w=0.0 is a vector" do
     a = tuple(4.3, -4.2, 3.1, 0.0)
-    assert_in_delta a.x, 4.3, epsilon()
-    assert_in_delta a.y, -4.2, epsilon()
-    assert_in_delta a.z, 3.1, epsilon()
-    assert_in_delta a.w, 0.0, epsilon()
+    {x, y, z, w} = a
+    assert_in_delta x, 4.3, epsilon()
+    assert_in_delta y, -4.2, epsilon()
+    assert_in_delta z, 3.1, epsilon()
+    assert_in_delta w, 0.0, epsilon()
     refute is_point?(a)
     assert is_vector?(a)
   end
@@ -83,5 +85,19 @@ defmodule RayTracer.TupleTest do
   test "Dividing a tuple by a scalar" do
     a = tuple(1, -2, 3, -4)
     assert scalar_div(a, 2) == tuple(0.5, -1, 1.5, -2)
+  end
+
+  test "Colors are (red, green, blue) tuples" do
+    c = color(-0.5, 0.4, 1.7)
+    {red, green, blue, _} = c
+    assert red == -0.5
+    assert green == 0.4
+    assert blue == 1.7
+  end
+
+  test "Multiplying colors" do
+    c1 = color(1, 0.2, 0.4)
+    c2 = color(0.9, 1, 0.1)
+    assert approx_eq(hadamard_product(c1, c2), color(0.9, 0.2, 0.04))
   end
 end
