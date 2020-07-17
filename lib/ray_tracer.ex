@@ -1,6 +1,6 @@
 defmodule RayTracer do
   @spec epsilon() :: float
   def epsilon() do
-    Application.get_env(:ray_tracer, :epsilon)
+    0.00001
   end
 end

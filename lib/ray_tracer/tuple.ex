@@ -3,12 +3,12 @@ defmodule RayTracer.Tuple do
 
   @spec approx_eq(t, t) :: boolean
   def approx_eq({ax, ay, az, aw}, {bx, by, bz, bw}) do
-    epsilon = RayTracer.epsilon()
+    e = RayTracer.epsilon()
     xdiff = abs(ax - bx)
     ydiff = abs(ay - by)
     zdiff = abs(az - bz)
     wdiff = abs(aw - bw)
-    xdiff <= epsilon && ydiff <= epsilon && zdiff <= epsilon && wdiff <= epsilon
+    xdiff <= e && ydiff <= e && zdiff <= e && wdiff <= e
   end
 
   @spec tuple(float, float, float, float) :: t
