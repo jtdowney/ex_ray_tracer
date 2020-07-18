@@ -74,12 +74,12 @@ defmodule RayTracer.TupleTest do
 
   test "Multiplying a tuple by a scalar" do
     a = tuple(1, -2, 3, -4)
-    assert scalar_mult(a, 3.5) == tuple(3.5, -7, 10.5, -14)
+    assert scalar_mul(a, 3.5) == tuple(3.5, -7, 10.5, -14)
   end
 
   test "Multiplying a tuple by a fraction" do
     a = tuple(1, -2, 3, -4)
-    assert scalar_mult(a, 0.5) == tuple(0.5, -1, 1.5, -2)
+    assert scalar_mul(a, 0.5) == tuple(0.5, -1, 1.5, -2)
   end
 
   test "Dividing a tuple by a scalar" do
