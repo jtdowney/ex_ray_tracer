@@ -1,7 +1,8 @@
 defmodule RayTracer.MaterialTest do
   use ExUnit.Case
 
-  import RayTracer.{Light, Material, Tuple}
+  alias RayTracer.Light
+  import RayTracer.{Core, Material}
 
   test "The default material" do
     m = material()
@@ -17,7 +18,7 @@ defmodule RayTracer.MaterialTest do
     position = point(0, 0, 0)
     eyev = vector(0, 0, -1)
     normalv = vector(0, 0, -1)
-    light = point_light(point(0, 0, -10), color(1, 1, 1))
+    light = Light.point_light(point(0, 0, -10), color(1, 1, 1))
     result = lighting(m, light, position, eyev, normalv)
     assert approx_eq(result, color(1.9, 1.9, 1.9))
   end
@@ -27,7 +28,7 @@ defmodule RayTracer.MaterialTest do
     position = point(0, 0, 0)
     eyev = vector(0, :math.sqrt(2) / 2, -:math.sqrt(2) / 2)
     normalv = vector(0, 0, -1)
-    light = point_light(point(0, 0, -10), color(1, 1, 1))
+    light = Light.point_light(point(0, 0, -10), color(1, 1, 1))
     result = lighting(m, light, position, eyev, normalv)
     assert approx_eq(result, color(1.0, 1.0, 1.0))
   end
@@ -37,7 +38,7 @@ defmodule RayTracer.MaterialTest do
     position = point(0, 0, 0)
     eyev = vector(0, 0, -1)
     normalv = vector(0, 0, -1)
-    light = point_light(point(0, 10, -10), color(1, 1, 1))
+    light = Light.point_light(point(0, 10, -10), color(1, 1, 1))
     result = lighting(m, light, position, eyev, normalv)
     assert approx_eq(result, color(0.7364, 0.7364, 0.7364))
   end
@@ -47,7 +48,7 @@ defmodule RayTracer.MaterialTest do
     position = point(0, 0, 0)
     eyev = vector(0, -:math.sqrt(2) / 2, -:math.sqrt(2) / 2)
     normalv = vector(0, 0, -1)
-    light = point_light(point(0, 10, -10), color(1, 1, 1))
+    light = Light.point_light(point(0, 10, -10), color(1, 1, 1))
     result = lighting(m, light, position, eyev, normalv)
     assert approx_eq(result, color(1.6364, 1.6364, 1.6364))
   end
@@ -57,7 +58,7 @@ defmodule RayTracer.MaterialTest do
     position = point(0, 0, 0)
     eyev = vector(0, 0, -1)
     normalv = vector(0, 0, -1)
-    light = point_light(point(0, 0, 10), color(1, 1, 1))
+    light = Light.point_light(point(0, 0, 10), color(1, 1, 1))
     result = lighting(m, light, position, eyev, normalv)
     assert approx_eq(result, color(0.1, 0.1, 0.1))
   end

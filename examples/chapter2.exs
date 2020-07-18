@@ -1,6 +1,5 @@
-import RayTracer.Canvas
-import RayTracer.Tuple
-import RayTracer.Vector
+import RayTracer.Core
+alias RayTracer.{Canvas, Vector}
 
 defmodule Chapter2 do
   def tick(%{gravity: gravity, wind: wind}, %{position: position, velocity: velocity}) do
@@ -20,14 +19,14 @@ end
 
 color = color(1, 0, 0)
 start = point(0, 1, 0)
-velocity = vector(1, 1.8, 0) |> normalize() |> scalar_mult(11.25)
+velocity = vector(1, 1.8, 0) |> Vector.normalize() |> scalar_mul(11.25)
 p = Chapter2.projectile(start, velocity)
 
 gravity = vector(0, -0.1, 0)
 wind = vector(-0.01, 0, 0)
 e = Chapter2.environment(gravity, wind)
 
-c = %{height: height} = canvas(900, 550)
+c = %{height: height} = Canvas.canvas(900, 550)
 
 Stream.iterate(p, fn prev -> Chapter2.tick(e, prev) end)
 |> Stream.take_while(fn %{position: {_, y, _, _}} -> y > 0 end)
@@ -37,7 +36,7 @@ Stream.iterate(p, fn prev -> Chapter2.tick(e, prev) end)
   {x, y}
 end)
 |> Enum.reduce(c, fn {x, y}, c ->
-  write_pixel(c, x, y, color)
+  Canvas.write_pixel(c, x, y, color)
 end)
-|> to_ppm()
+|> Canvas.to_ppm()
 |> IO.puts()

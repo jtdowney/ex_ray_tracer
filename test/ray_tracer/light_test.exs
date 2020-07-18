@@ -1,7 +1,7 @@
 defmodule RayTracer.LightTest do
   use ExUnit.Case
 
-  import RayTracer.{Light, Tuple}
+  import RayTracer.{Core, Light}
 
   test "A point light has a position and intensity" do
     intensity = color(1, 1, 1)

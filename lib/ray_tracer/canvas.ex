@@ -1,5 +1,7 @@
 defmodule RayTracer.Canvas do
-  @default_pixel RayTracer.Tuple.color(0, 0, 0)
+  import RayTracer.Core
+
+  @default_pixel color(0, 0, 0)
 
   def canvas(width, height) do
     %{width: width, height: height, pixels: %{}}

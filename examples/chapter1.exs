@@ -1,5 +1,5 @@
-import RayTracer.Tuple
-import RayTracer.Vector
+import RayTracer.Core
+alias RayTracer.Vector
 
 defmodule Chapter1 do
   def tick(%{gravity: gravity, wind: wind}, %{position: position, velocity: velocity}) do
@@ -17,7 +17,7 @@ defmodule Chapter1 do
   end
 end
 
-p = Chapter1.projectile(point(0, 1, 0), vector(1, 1, 0) |> normalize())
+p = Chapter1.projectile(point(0, 1, 0), vector(1, 1, 0) |> Vector.normalize())
 e = Chapter1.environment(vector(0, -0.1, 0), vector(-0.01, 0, 0))
 
 Stream.iterate(p, fn prev -> Chapter1.tick(e, prev) end)

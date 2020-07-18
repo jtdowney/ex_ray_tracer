@@ -21,17 +21,6 @@ defmodule RayTracer.Matrix do
     for i <- 0..top, j <- 0..top, do: at(m, i, j)
   end
 
-  def approx_eq(%{size: size1}, %{size: size2}) when size1 != size2, do: false
-
-  def approx_eq(m1, m2) do
-    e = RayTracer.epsilon()
-
-    Enum.zip(values(m1), values(m2))
-    |> Enum.all?(fn {a, b} ->
-      abs(a - b) <= e
-    end)
-  end
-
   def at(%{elements: elements}, i, j) do
     elements |> elem(i) |> elem(j)
   end

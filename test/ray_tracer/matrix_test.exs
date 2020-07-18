@@ -2,7 +2,7 @@ defmodule RayTracer.MatrixTest do
   use ExUnit.Case
   use ExUnitProperties
 
-  import RayTracer.Matrix
+  import RayTracer.{Core, Matrix}
 
   def matrix_gen do
     gen all a <- {StreamData.float(), StreamData.float(), StreamData.float()},
@@ -62,8 +62,6 @@ defmodule RayTracer.MatrixTest do
   end
 
   test "A matrix multiplied by a tuple" do
-    import RayTracer.Tuple
-
     a = matrix({{1, 2, 3, 4}, {2, 4, 4, 2}, {8, 6, 4, 1}, {0, 0, 0, 1}})
     b = tuple(1, 2, 3, 1)
 

@@ -1,10 +1,11 @@
 defmodule RayTracer.SphereTest do
   use ExUnit.Case
 
-  import RayTracer.{Material, Matrix, Ray, Sphere, Transformation, Tuple, Vector}
+  alias RayTracer.{Material, Matrix, Ray, Transformation, Vector}
+  import RayTracer.{Core, Sphere}
 
   test "A ray intersects a sphere at two points" do
-    r = ray(point(0, 0, -5), vector(0, 0, 1))
+    r = Ray.ray(point(0, 0, -5), vector(0, 0, 1))
     s = sphere()
     xs = intersect(s, r)
     assert length(xs) == 2
@@ -13,7 +14,7 @@ defmodule RayTracer.SphereTest do
   end
 
   test "A ray intersects a sphere at a tangent" do
-    r = ray(point(0, 1, -5), vector(0, 0, 1))
+    r = Ray.ray(point(0, 1, -5), vector(0, 0, 1))
     s = sphere()
     xs = intersect(s, r)
     assert length(xs) == 2
@@ -22,14 +23,14 @@ defmodule RayTracer.SphereTest do
   end
 
   test "A ray misses a sphere" do
-    r = ray(point(0, 2, -5), vector(0, 0, 1))
+    r = Ray.ray(point(0, 2, -5), vector(0, 0, 1))
     s = sphere()
     xs = intersect(s, r)
     assert length(xs) == 0
   end
 
   test "A ray originates inside a sphere" do
-    r = ray(point(0, 0, 0), vector(0, 0, 1))
+    r = Ray.ray(point(0, 0, 0), vector(0, 0, 1))
     s = sphere()
     xs = intersect(s, r)
     assert length(xs) == 2
@@ -38,7 +39,7 @@ defmodule RayTracer.SphereTest do
   end
 
   test "A sphere is behind a ray" do
-    r = ray(point(0, 0, 5), vector(0, 0, 1))
+    r = Ray.ray(point(0, 0, 5), vector(0, 0, 1))
     s = sphere()
     xs = intersect(s, r)
     assert length(xs) == 2
@@ -48,20 +49,20 @@ defmodule RayTracer.SphereTest do
 
   test "A sphere's default transformation" do
     s = sphere()
-    assert s.transform == identity(4)
+    assert s.transform == Matrix.identity(4)
   end
 
   test "Changing a sphere's transformation" do
     s = sphere()
-    t = translation(2, 3, 4)
+    t = Transformation.translation(2, 3, 4)
     s = Map.put(s, :transform, t)
     assert s.transform == t
   end
 
   test "Intersecting a scaled sphere with a ray" do
-    r = ray(point(0, 0, -5), vector(0, 0, 1))
+    r = Ray.ray(point(0, 0, -5), vector(0, 0, 1))
     s = sphere()
-    s = Map.put(s, :transform, scaling(2, 2, 2))
+    s = Map.put(s, :transform, Transformation.scaling(2, 2, 2))
     xs = intersect(s, r)
     assert length(xs) == 2
     assert Enum.at(xs, 0).t == 3
@@ -69,9 +70,9 @@ defmodule RayTracer.SphereTest do
   end
 
   test "Intersecting a translated sphere with a ray" do
-    r = ray(point(0, 0, -5), vector(0, 0, 1))
+    r = Ray.ray(point(0, 0, -5), vector(0, 0, 1))
     s = sphere()
-    s = Map.put(s, :transform, translation(5, 0, 0))
+    s = Map.put(s, :transform, Transformation.translation(5, 0, 0))
     xs = intersect(s, r)
     assert xs == []
   end
@@ -103,32 +104,32 @@ defmodule RayTracer.SphereTest do
   test "The normal is a normalized vector" do
     s = sphere()
     n = normal_at(s, point(:math.sqrt(3) / 3, :math.sqrt(3) / 3, :math.sqrt(3) / 3))
-    assert n == normalize(n)
+    assert n == Vector.normalize(n)
   end
 
   test "Computing the normal on a translated sphere" do
     s = sphere()
-    s = Map.put(s, :transform, translation(0, 1, 0))
+    s = Map.put(s, :transform, Transformation.translation(0, 1, 0))
     n = normal_at(s, point(0, 1.70711, -0.70711))
-    assert RayTracer.Tuple.approx_eq(n, vector(0, 0.70711, -0.70711))
+    assert approx_eq(n, vector(0, 0.70711, -0.70711))
   end
 
   test "Computing the normal on a transformed sphere" do
     s = sphere()
-    m = scaling(1, 0.5, 1) |> rotation_z(:math.pi() / 5)
+    m = Transformation.scaling(1, 0.5, 1) |> Transformation.rotation_z(:math.pi() / 5)
     s = Map.put(s, :transform, m)
     n = normal_at(s, point(0, :math.sqrt(2) / 2, -:math.sqrt(2) / 2))
-    assert RayTracer.Tuple.approx_eq(n, vector(0, 0.97014, -0.24254))
+    assert approx_eq(n, vector(0, 0.97014, -0.24254))
   end
 
   test "A sphere has a default material" do
     s = sphere()
-    assert s.material == material()
+    assert s.material == Material.material()
   end
 
   test "A sphere may be assigned a material" do
     s = sphere()
-    m = material()
+    m = Material.material()
     m = Map.put(m, :ambient, 1)
     s = Map.put(s, :material, m)
     assert s.material == m

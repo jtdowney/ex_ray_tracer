@@ -2,9 +2,7 @@ defmodule RayTracer.VectorTest do
   use ExUnit.Case
   use ExUnitProperties
 
-  import RayTracer
-  import RayTracer.Tuple
-  import RayTracer.Vector
+  import RayTracer.{Core, Vector}
 
   test "Computing the magnitude of vectors" do
     v = vector(1, 0, 0)

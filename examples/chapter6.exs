@@ -1,5 +1,5 @@
+import RayTracer.Core
 alias RayTracer.{Canvas, Intersection, Light, Material, Ray, Sphere, Vector}
-import RayTracer.Tuple
 
 ray_origin = point(0, 0, -5)
 wall_z = 10

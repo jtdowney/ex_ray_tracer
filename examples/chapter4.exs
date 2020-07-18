@@ -1,8 +1,8 @@
-import RayTracer.{Transformation, Tuple}
-alias RayTracer.{Canvas, Matrix}
+import RayTracer.Core
+alias RayTracer.{Canvas, Matrix, Transformation}
 
 color = color(1, 1, 1)
-transform = rotation_z(:math.pi() / 6)
+transform = Transformation.rotation_z(:math.pi() / 6)
 
 size = 500
 canvas = Canvas.canvas(size, size)

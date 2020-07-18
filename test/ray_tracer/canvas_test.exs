@@ -1,8 +1,7 @@
 defmodule RayTracer.CanvasTest do
   use ExUnit.Case
 
-  import RayTracer.Canvas
-  import RayTracer.Tuple
+  import RayTracer.{Canvas, Core}
 
   test "Creating a canvas" do
     c = canvas(10, 20)

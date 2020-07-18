@@ -1,11 +1,22 @@
-defmodule RayTracer.Tuple do
-  def approx_eq({ax, ay, az, aw}, {bx, by, bz, bw}) do
-    e = RayTracer.epsilon()
-    xdiff = abs(ax - bx)
-    ydiff = abs(ay - by)
-    zdiff = abs(az - bz)
-    wdiff = abs(aw - bw)
-    xdiff <= e && ydiff <= e && zdiff <= e && wdiff <= e
+defmodule RayTracer.Core do
+  def approx_eq(a, b) when is_number(a) and is_number(b) do
+    abs(a - b) <= epsilon()
+  end
+
+  def approx_eq(a, b) when (is_list(a) and is_list(b)) or (is_map(a) and is_map(b)) do
+    Enum.zip(a, b) |> Enum.all?(fn {a, b} -> approx_eq(a, b) end)
+  end
+
+  def approx_eq(a, b) when is_tuple(a) and is_tuple(b) do
+    approx_eq(Tuple.to_list(a), Tuple.to_list(b))
+  end
+
+  def approx_eq(a, b) do
+    a == b
+  end
+
+  def epsilon() do
+    0.00001
   end
 
   def tuple(x, y, z, w) do

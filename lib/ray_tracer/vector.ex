@@ -1,5 +1,5 @@
 defmodule RayTracer.Vector do
-  import RayTracer.Tuple
+  import RayTracer.Core
 
   def magnitude({x, y, z, _}) do
     (:math.pow(x, 2) + :math.pow(y, 2) + :math.pow(z, 2))

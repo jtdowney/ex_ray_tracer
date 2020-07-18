@@ -1,5 +1,6 @@
 defmodule RayTracer.Ray do
-  import RayTracer.{Matrix, Tuple}
+  import RayTracer.Core
+  alias RayTracer.Matrix
 
   def ray(origin, direction) do
     %{origin: origin, direction: direction}
@@ -11,8 +12,8 @@ defmodule RayTracer.Ray do
   end
 
   def transform(%{origin: origin, direction: direction}, transform) do
-    origin = mul(transform, origin)
-    direction = mul(transform, direction)
+    origin = Matrix.mul(transform, origin)
+    direction = Matrix.mul(transform, direction)
     ray(origin, direction)
   end
 end
