@@ -18,4 +18,8 @@ defmodule RayTracer.Vector do
   def cross({ax, ay, az, _}, {bx, by, bz, _}) do
     vector(ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx)
   end
+
+  def reflect(v, n) do
+    sub(v, scalar_mul(n, 2 * dot(v, n)))
+  end
 end

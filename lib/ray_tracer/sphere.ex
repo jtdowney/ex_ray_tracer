@@ -1,8 +1,8 @@
 defmodule RayTracer.Sphere do
-  import RayTracer.{Intersection, Matrix, Ray, Tuple, Vector}
+  import RayTracer.{Intersection, Material, Matrix, Ray, Tuple, Vector}
 
   def sphere() do
-    %{shape: :sphere, transform: identity(4)}
+    %{shape: :sphere, transform: identity(4), material: material()}
   end
 
   def intersect(%{shape: :sphere, transform: transform} = object, ray) do
@@ -22,7 +22,15 @@ defmodule RayTracer.Sphere do
     end
   end
 
-  def put_transform(sphere, transform) do
-    Map.put(sphere, :transform, transform)
+  def normal_at(%{transform: transform}, world_point) do
+    object_point = transform |> inverse |> mul(world_point)
+    object_normal = sub(object_point, point(0, 0, 0)) |> normalize
+
+    transform
+    |> inverse()
+    |> transpose()
+    |> mul(object_normal)
+    |> put_elem(3, 0)
+    |> normalize()
   end
 end
