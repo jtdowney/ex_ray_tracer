@@ -101,8 +101,9 @@ defmodule RayTracer.Matrix do
   end
 
   def inverse(m) do
-    if invertible?(m) do
-      determinant = determinant(m)
+    determinant = determinant(m)
+
+    if determinant != 0 do
       top = m.size - 1
 
       for i <- 0..top do
