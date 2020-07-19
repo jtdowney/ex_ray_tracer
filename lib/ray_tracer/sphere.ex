@@ -2,12 +2,14 @@ defmodule RayTracer.Sphere do
   import RayTracer.Core
   alias RayTracer.{Intersection, Material, Matrix, Ray, Vector}
 
+  defstruct transform: Matrix.identity(4), material: Material.material()
+
   def sphere() do
-    %{shape: :sphere, transform: Matrix.identity(4), material: Material.material()}
+    %RayTracer.Sphere{}
   end
 
-  def intersect(%{shape: :sphere, transform: transform} = object, ray) do
-    ray = Ray.transform(ray, Matrix.inverse(transform))
+  def intersect(object, ray) do
+    ray = Ray.transform(ray, Matrix.inverse(object.transform))
     sphere_to_ray = sub(ray.origin, point(0, 0, 0))
     a = Vector.dot(ray.direction, ray.direction)
     b = 2 * Vector.dot(ray.direction, sphere_to_ray)
@@ -22,8 +24,8 @@ defmodule RayTracer.Sphere do
     end
   end
 
-  def normal_at(%{transform: transform}, world_point) do
-    transform_inv = transform |> Matrix.inverse()
+  def normal_at(object, world_point) do
+    transform_inv = object.transform |> Matrix.inverse()
     object_point = transform_inv |> Matrix.mul(world_point)
     object_normal = sub(object_point, point(0, 0, 0)) |> Vector.normalize()
 

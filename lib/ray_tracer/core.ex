@@ -3,8 +3,12 @@ defmodule RayTracer.Core do
     abs(a - b) <= epsilon()
   end
 
-  def approx_eq(a, b) when (is_list(a) and is_list(b)) or (is_map(a) and is_map(b)) do
+  def approx_eq(a, b) when is_list(a) and is_list(b) do
     Enum.zip(a, b) |> Enum.all?(fn {a, b} -> approx_eq(a, b) end)
+  end
+
+  def approx_eq(a, b) when is_map(a) and is_map(b) do
+    approx_eq(Map.to_list(a), Map.to_list(b))
   end
 
   def approx_eq(a, b) when is_tuple(a) and is_tuple(b) do

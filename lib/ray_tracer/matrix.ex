@@ -1,6 +1,8 @@
 defmodule RayTracer.Matrix do
+  defstruct [:size, :elements]
+
   def matrix(elements) do
-    %{size: tuple_size(elements), elements: elements}
+    %RayTracer.Matrix{size: tuple_size(elements), elements: elements}
   end
 
   def identity(size) do
@@ -16,25 +18,17 @@ defmodule RayTracer.Matrix do
     |> matrix
   end
 
-  def values(%{size: size} = m) do
-    top = size - 1
+  def values(m) do
+    top = m.size - 1
     for i <- 0..top, j <- 0..top, do: at(m, i, j)
   end
 
-  def at(%{elements: elements}, i, j) do
-    elements |> elem(i) |> elem(j)
+  def at(m, i, j) do
+    m.elements |> elem(i) |> elem(j)
   end
 
-  def row(%{elements: elements}, i) do
-    elements |> elem(i) |> Tuple.to_list()
-  end
-
-  def column(%{elements: elements}, j) do
-    elements |> Tuple.to_list() |> Enum.map(&elem(&1, j))
-  end
-
-  def mul(%{size: size} = a, b) when is_map(b) do
-    top = size - 1
+  def mul(a, b) when is_map(b) do
+    top = a.size - 1
 
     for i <- 0..top do
       for j <- 0..top do
@@ -46,8 +40,8 @@ defmodule RayTracer.Matrix do
     |> matrix()
   end
 
-  def mul(%{size: size} = a, b) when is_tuple(b) do
-    top = size - 1
+  def mul(a, b) when is_tuple(b) do
+    top = a.size - 1
 
     for i <- 0..top do
       for(n <- 0..top, do: at(a, i, n) * elem(b, n)) |> Enum.sum()
@@ -55,8 +49,8 @@ defmodule RayTracer.Matrix do
     |> List.to_tuple()
   end
 
-  def transpose(%{size: size} = m) do
-    top = size - 1
+  def transpose(m) do
+    top = m.size - 1
 
     for i <- 0..top do
       for j <- 0..top do
@@ -68,19 +62,19 @@ defmodule RayTracer.Matrix do
     |> matrix()
   end
 
-  def determinant(%{size: 2, elements: {{a, b}, {c, d}}}) do
+  def determinant(%RayTracer.Matrix{size: 2, elements: {{a, b}, {c, d}}}) do
     a * d - b * c
   end
 
-  def determinant(%{size: size} = m) do
-    for j <- 0..(size - 1) do
+  def determinant(m) do
+    for j <- 0..(m.size - 1) do
       at(m, 0, j) * cofactor(m, 0, j)
     end
     |> Enum.sum()
   end
 
-  def submatrix(%{size: size} = m, a, b) do
-    top = size - 1
+  def submatrix(m, a, b) do
+    top = m.size - 1
 
     for i <- 0..top, i != a do
       for j <- 0..top, j != b do
@@ -106,10 +100,10 @@ defmodule RayTracer.Matrix do
     determinant(m) != 0
   end
 
-  def inverse(%{size: size} = m) do
+  def inverse(m) do
     if invertible?(m) do
       determinant = determinant(m)
-      top = size - 1
+      top = m.size - 1
 
       for i <- 0..top do
         for j <- 0..top do

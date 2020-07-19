@@ -3,12 +3,14 @@ defmodule RayTracer.Canvas do
 
   @default_pixel color(0, 0, 0)
 
+  defstruct [:width, :height, pixels: %{}]
+
   def canvas(width, height) do
-    %{width: width, height: height, pixels: %{}}
+    %RayTracer.Canvas{width: width, height: height}
   end
 
-  def write_pixel(%{pixels: pixels} = canvas, x, y, color) do
-    pixels = Map.put(pixels, {x, y}, color)
+  def write_pixel(canvas, x, y, color) do
+    pixels = Map.put(canvas.pixels, {x, y}, color)
     %{canvas | pixels: pixels}
   end
 
@@ -16,15 +18,15 @@ defmodule RayTracer.Canvas do
     canvas.pixels |> Map.get({x, y}, @default_pixel)
   end
 
-  def to_ppm(%{width: width, height: height} = canvas) do
+  def to_ppm(canvas) do
     header = [
       "P3",
-      "#{width} #{height}",
+      "#{canvas.width} #{canvas.height}",
       "255"
     ]
 
     data =
-      0..(height - 1)
+      0..(canvas.height - 1)
       |> Stream.flat_map(&build_row(canvas, &1))
       |> Enum.to_list()
 
@@ -32,8 +34,8 @@ defmodule RayTracer.Canvas do
     ppm <> "\n"
   end
 
-  defp build_row(%{width: width} = canvas, y) do
-    0..(width - 1)
+  defp build_row(canvas, y) do
+    0..(canvas.width - 1)
     |> Stream.flat_map(&build_pixel(canvas, &1, y))
     |> Stream.chunk_every(17)
     |> Enum.map(&Enum.join(&1, " "))

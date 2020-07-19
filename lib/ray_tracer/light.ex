@@ -1,5 +1,9 @@
 defmodule RayTracer.Light do
+  defmodule PointLight do
+    defstruct [:position, :intensity]
+  end
+
   def point_light(position, intensity) do
-    %{position: position, intensity: intensity}
+    %PointLight{position: position, intensity: intensity}
   end
 end
