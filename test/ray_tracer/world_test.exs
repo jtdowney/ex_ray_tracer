@@ -79,4 +79,36 @@ defmodule RayTracer.WorldTest do
     c = color_at(w, r)
     assert approx_eq(c, color(0.38066, 0.47583, 0.2855))
   end
+
+  test "There is no shadow when nothing is collinear with point and light", %{world: w} do
+    p = point(0, 10, 0)
+    refute shadowed?(w, p)
+  end
+
+  test "The shadow when an object is between the point and the light", %{world: w} do
+    p = point(10, -10, 10)
+    assert shadowed?(w, p)
+  end
+
+  test "There is no shadow when an object is behind the light", %{world: w} do
+    p = point(-20, 20, -20)
+    refute shadowed?(w, p)
+  end
+
+  test "There is no shadow when an object is behind the point", %{world: w} do
+    p = point(-2, 2, -2)
+    refute shadowed?(w, p)
+  end
+
+  test "shade_hit() is given an intersection in shadow" do
+    s1 = Sphere.sphere()
+    s2 = Sphere.sphere() |> Map.put(:transform, Transformation.translation(0, 0, 10))
+    light = Light.point_light(point(0, 0, -10), color(1, 1, 1))
+    w = world() |> Map.put(:light, light) |> add_object(s1) |> add_object(s2)
+    r = Ray.ray(point(0, 0, 5), vector(0, 0, 1))
+    i = Intersection.intersection(4, s2)
+    comps = Intersection.prepare_computations(i, r)
+    c = shade_hit(w, comps)
+    assert approx_eq(c, color(0.1, 0.1, 0.1))
+  end
 end

@@ -2,7 +2,7 @@ defmodule RayTracer.IntersectionTest do
   use ExUnit.Case
 
   import RayTracer.{Core, Intersection}
-  alias RayTracer.{Ray, Sphere}
+  alias RayTracer.{Ray, Sphere, Transformation}
 
   test "An intersection encapsulates t and object" do
     s = Sphere.sphere()
@@ -92,5 +92,14 @@ defmodule RayTracer.IntersectionTest do
     assert comps.point == point(0, 0, 1)
     assert comps.eyev == vector(0, 0, -1)
     assert comps.normalv == vector(0, 0, -1)
+  end
+
+  test "The hit should offset the point" do
+    r = Ray.ray(point(0, 0, -5), vector(0, 0, 1))
+    shape = Sphere.sphere() |> Map.put(:transform, Transformation.translation(0, 0, 1))
+    i = intersection(5, shape)
+    comps = prepare_computations(i, r)
+    assert comps.over_point |> elem(2) < -epsilon() / 2
+    assert comps.point |> elem(2) > comps.over_point |> elem(2)
   end
 end

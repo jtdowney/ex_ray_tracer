@@ -8,13 +8,13 @@ defmodule RayTracer.Material do
     %RayTracer.Material{}
   end
 
-  def lighting(m, light, point, eyev, normalv) do
+  def lighting(m, light, point, eyev, normalv, in_shadow \\ false) do
     effective_color = hadamard_product(m.color, light.intensity)
     lightv = sub(light.position, point) |> Vector.normalize()
     ambient = scalar_mul(effective_color, m.ambient)
     light_dot_normal = Vector.dot(lightv, normalv)
 
-    if light_dot_normal < 0 do
+    if light_dot_normal < 0 or in_shadow do
       ambient
     else
       diffuse = scalar_mul(effective_color, m.diffuse) |> scalar_mul(light_dot_normal)

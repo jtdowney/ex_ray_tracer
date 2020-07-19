@@ -28,6 +28,16 @@ defmodule RayTracer.Intersection do
         {false, normalv}
       end
 
-    %{t: t, object: object, point: point, eyev: eyev, normalv: normalv, inside: inside}
+    over_point = add(point, scalar_mul(normalv, epsilon()))
+
+    %{
+      t: t,
+      object: object,
+      point: point,
+      eyev: eyev,
+      normalv: normalv,
+      inside: inside,
+      over_point: over_point
+    }
   end
 end

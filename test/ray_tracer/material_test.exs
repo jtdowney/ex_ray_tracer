@@ -62,4 +62,14 @@ defmodule RayTracer.MaterialTest do
     result = lighting(m, light, position, eyev, normalv)
     assert approx_eq(result, color(0.1, 0.1, 0.1))
   end
+
+  test "Lighting with the surface in shadow" do
+    m = material()
+    position = point(0, 0, 0)
+    eyev = vector(0, 0, -1)
+    normalv = vector(0, 0, -1)
+    light = Light.point_light(point(0, 0, -10), color(1, 1, 1))
+    result = lighting(m, light, position, eyev, normalv, true)
+    assert approx_eq(result, color(0.1, 0.1, 0.1))
+  end
 end
