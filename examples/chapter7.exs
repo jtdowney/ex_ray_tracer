@@ -64,8 +64,9 @@ world =
   |> World.add_object(middle)
 
 t = Transformation.view_transform(point(0, 1.5, -5), point(0, 1, 0), vector(0, 1, 0))
-camera = Camera.camera(1000, 500, :math.pi() / 3) |> Map.put(:transform, t)
 
-Camera.render(camera, world)
+Camera.camera(1000, 500, :math.pi() / 3)
+|> Map.put(:transform, t)
+|> Camera.render(world)
 |> Canvas.to_ppm()
 |> IO.puts()
