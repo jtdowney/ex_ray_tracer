@@ -1,8 +1,8 @@
 defmodule RayTracer.IntersectionTest do
   use ExUnit.Case
 
-  import RayTracer.Intersection
-  alias RayTracer.Sphere
+  import RayTracer.{Core, Intersection}
+  alias RayTracer.{Ray, Sphere}
 
   test "An intersection encapsulates t and object" do
     s = Sphere.sphere()
@@ -61,5 +61,36 @@ defmodule RayTracer.IntersectionTest do
     i4 = intersection(2, s)
     xs = intersections([i1, i2, i3, i4])
     assert hit(xs) == i4
+  end
+
+  test "Precomputing the state of an intersection" do
+    r = Ray.ray(point(0, 0, -5), vector(0, 0, 1))
+    shape = Sphere.sphere()
+    i = intersection(4, shape)
+    comps = prepare_computations(i, r)
+    assert comps.t == i.t
+    assert comps.object == i.object
+    assert comps.point == point(0, 0, -1)
+    assert comps.eyev == vector(0, 0, -1)
+    assert comps.normalv == vector(0, 0, -1)
+  end
+
+  test "The hit, when an intersection occurs on the outside" do
+    r = Ray.ray(point(0, 0, -5), vector(0, 0, 1))
+    shape = Sphere.sphere()
+    i = intersection(4, shape)
+    comps = prepare_computations(i, r)
+    refute comps.inside
+  end
+
+  test "The hit, when an intersection occurs on the inside" do
+    r = Ray.ray(point(0, 0, 0), vector(0, 0, 1))
+    shape = Sphere.sphere()
+    i = intersection(1, shape)
+    comps = prepare_computations(i, r)
+    assert comps.inside
+    assert comps.point == point(0, 0, 1)
+    assert comps.eyev == vector(0, 0, -1)
+    assert comps.normalv == vector(0, 0, -1)
   end
 end

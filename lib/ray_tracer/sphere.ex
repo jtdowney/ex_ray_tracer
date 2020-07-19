@@ -15,20 +15,19 @@ defmodule RayTracer.Sphere do
     discriminant = :math.pow(b, 2) - 4 * a * c
 
     if discriminant < 0 do
-      Intersection.intersections([])
+      []
     else
       [(-b - :math.sqrt(discriminant)) / (2 * a), (-b + :math.sqrt(discriminant)) / (2 * a)]
       |> Enum.map(&Intersection.intersection(&1, object))
-      |> Intersection.intersections()
     end
   end
 
   def normal_at(%{transform: transform}, world_point) do
-    object_point = transform |> Matrix.inverse() |> Matrix.mul(world_point)
+    transform_inv = transform |> Matrix.inverse()
+    object_point = transform_inv |> Matrix.mul(world_point)
     object_normal = sub(object_point, point(0, 0, 0)) |> Vector.normalize()
 
-    transform
-    |> Matrix.inverse()
+    transform_inv
     |> Matrix.transpose()
     |> Matrix.mul(object_normal)
     |> put_elem(3, 0)
