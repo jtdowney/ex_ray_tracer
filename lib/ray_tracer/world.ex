@@ -1,4 +1,8 @@
 defmodule RayTracer.World do
+  @moduledoc """
+  Represents a world with objects, a light, that can be rendered with a `RayTracer.Camera`.
+  """
+
   defstruct [:light, objects: []]
 
   import RayTracer.Core

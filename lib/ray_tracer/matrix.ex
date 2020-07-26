@@ -1,4 +1,8 @@
 defmodule RayTracer.Matrix do
+  @moduledoc """
+  Representation of a square matrix and operations on those matricies.
+  """
+
   defstruct [:size, :elements]
 
   def matrix(elements) do

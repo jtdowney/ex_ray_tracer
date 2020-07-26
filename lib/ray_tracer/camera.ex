@@ -1,4 +1,8 @@
 defmodule RayTracer.Camera do
+  @moduledoc """
+  Camera for a `RayTracer.World` that can render a `RayTracer.Canvas`.
+  """
+
   import RayTracer.Core
   alias RayTracer.{Canvas, Matrix, Ray, Vector, World}
 

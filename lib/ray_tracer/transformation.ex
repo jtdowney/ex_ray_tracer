@@ -1,4 +1,8 @@
 defmodule RayTracer.Transformation do
+  @moduledoc """
+  Construction of transformation matricies for objects and the `RayTracer.Camera`.
+  """
+
   import RayTracer.Core
   alias RayTracer.{Matrix, Vector}
 

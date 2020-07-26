@@ -1,4 +1,8 @@
 defmodule RayTracer.Ray do
+  @moduledoc """
+  A ray cast from a `RayTracer.Camera` in a `RayTracer.World`.
+  """
+
   import RayTracer.Core
   alias RayTracer.Matrix
 

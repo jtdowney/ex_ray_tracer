@@ -26,7 +26,7 @@ defmodule RayTracer.SphereTest do
     r = Ray.ray(point(0, 2, -5), vector(0, 0, 1))
     s = sphere()
     xs = intersect(s, r)
-    assert length(xs) == 0
+    assert xs == []
   end
 
   test "A ray originates inside a sphere" do

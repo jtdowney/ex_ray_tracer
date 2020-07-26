@@ -1,4 +1,8 @@
 defmodule RayTracer.Material do
+  @moduledoc """
+  Material for an object.
+  """
+
   alias RayTracer.Vector
   import RayTracer.Core
 

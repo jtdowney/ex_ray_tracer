@@ -1,4 +1,8 @@
 defmodule RayTracer.Sphere do
+  @moduledoc """
+  A sphere object.
+  """
+
   import RayTracer.Core
   alias RayTracer.{Intersection, Material, Matrix, Ray, Vector}
 

@@ -1,4 +1,8 @@
 defmodule RayTracer.Core do
+  @moduledoc """
+  Core constructors and utilities for ray tracing.
+  """
+
   def approx_eq(a, b) when is_number(a) and is_number(b) do
     abs(a - b) <= epsilon()
   end

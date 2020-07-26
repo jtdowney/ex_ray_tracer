@@ -1,4 +1,8 @@
 defmodule RayTracer.Canvas do
+  @moduledoc """
+  Canvas that can create a PPM formatted image.
+  """
+
   import RayTracer.Core
 
   @default_pixel color(0, 0, 0)

@@ -1,4 +1,8 @@
 defmodule RayTracer.Intersection do
+  @moduledoc """
+  Representation of a `RayTracer.Ray` intersecting an object.
+  """
+
   defstruct [:t, :object]
 
   import RayTracer.Core

@@ -1,4 +1,8 @@
 defmodule RayTracer.Vector do
+  @moduledoc """
+  Operations on vectors.
+  """
+
   import RayTracer.Core
 
   def magnitude({x, y, z, _}) do
