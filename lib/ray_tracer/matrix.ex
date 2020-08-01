@@ -3,10 +3,13 @@ defmodule RayTracer.Matrix do
   Representation of a square matrix and operations on those matricies.
   """
 
-  defstruct [:size, :elements]
+  use Memoize
 
   def matrix(elements) do
-    %RayTracer.Matrix{size: tuple_size(elements), elements: elements}
+    elements
+    |> Tuple.to_list()
+    |> Enum.flat_map(&Tuple.to_list(&1))
+    |> RayTracer.Matrix.Native.from_list()
   end
 
   def identity(size) do
@@ -16,111 +19,43 @@ defmodule RayTracer.Matrix do
       for j <- 0..top do
         if i == j, do: 1, else: 0
       end
-      |> List.to_tuple()
     end
-    |> List.to_tuple()
-    |> matrix
+    |> List.flatten()
+    |> RayTracer.Matrix.Native.from_list()
   end
 
-  def values(m) do
-    top = m.size - 1
-    for i <- 0..top, j <- 0..top, do: at(m, i, j)
-  end
+  defmemo(inverse(m), do: Native.inverse(m))
 
-  def at(m, i, j) do
-    m.elements |> elem(i) |> elem(j)
-  end
+  def invertible?(m), do: determinant(m) != 0
 
-  def mul(a, b) when is_map(b) do
-    top = a.size - 1
+  defdelegate at(m, i, j), to: RayTracer.Matrix.Native
+  defdelegate approx_eq(a, b), to: RayTracer.Matrix.Native
+  defdelegate cofactor(m, i, j), to: RayTracer.Matrix.Native
+  defdelegate determinant(m), to: RayTracer.Matrix.Native
+  defdelegate minor(m, i, j), to: RayTracer.Matrix.Native
+  defdelegate mul(a, b), to: RayTracer.Matrix.Native
+  defdelegate submatrix(m, i, j), to: RayTracer.Matrix.Native
+  defdelegate transpose(m), to: RayTracer.Matrix.Native
+  defdelegate values(m), to: RayTracer.Matrix.Native
 
-    for i <- 0..top do
-      for j <- 0..top do
-        for(n <- 0..top, do: at(a, i, n) * at(b, n, j)) |> Enum.sum()
-      end
-      |> List.to_tuple()
-    end
-    |> List.to_tuple()
-    |> matrix()
-  end
+  defmodule Native do
+    use Rustler, otp_app: :ray_tracer, crate: "ray_tracer"
 
-  def mul(a, b) when is_tuple(b) do
-    top = a.size - 1
+    defstruct [:data]
 
-    for i <- 0..top do
-      for(n <- 0..top, do: at(a, i, n) * elem(b, n)) |> Enum.sum()
-    end
-    |> List.to_tuple()
-  end
+    def from_list(_xs), do: error()
 
-  def transpose(m) do
-    top = m.size - 1
+    def at(_m, _i, _j), do: error()
+    def approx_eq(_a, _b), do: error()
+    def cofactor(_m, _i, _j), do: error()
+    def determinant(_m), do: error()
+    def inverse(_m), do: error()
+    def minor(_m, _i, _j), do: error()
+    def mul(_a, _b), do: error()
+    def submatrix(_m, _i, _j), do: error()
+    def transpose(_m), do: error()
+    def values(_m), do: error()
 
-    for i <- 0..top do
-      for j <- 0..top do
-        at(m, j, i)
-      end
-      |> List.to_tuple()
-    end
-    |> List.to_tuple()
-    |> matrix()
-  end
-
-  def determinant(%RayTracer.Matrix{size: 2, elements: {{a, b}, {c, d}}}) do
-    a * d - b * c
-  end
-
-  def determinant(m) do
-    for j <- 0..(m.size - 1) do
-      at(m, 0, j) * cofactor(m, 0, j)
-    end
-    |> Enum.sum()
-  end
-
-  def submatrix(m, a, b) do
-    top = m.size - 1
-
-    for i <- 0..top, i != a do
-      for j <- 0..top, j != b do
-        at(m, i, j)
-      end
-      |> List.to_tuple()
-    end
-    |> List.to_tuple()
-    |> matrix()
-  end
-
-  def minor(m, i, j) do
-    submatrix(m, i, j) |> determinant()
-  end
-
-  def cofactor(m, i, j) do
-    minor = minor(m, i, j)
-
-    if rem(i + j, 2) == 0, do: minor, else: -minor
-  end
-
-  def invertible?(m) do
-    determinant(m) != 0
-  end
-
-  def inverse(m) do
-    determinant = determinant(m)
-
-    if determinant != 0 do
-      top = m.size - 1
-
-      for i <- 0..top do
-        for j <- 0..top do
-          cofactor(m, i, j) / determinant
-        end
-        |> List.to_tuple()
-      end
-      |> List.to_tuple()
-      |> matrix()
-      |> transpose()
-    else
-      {:error, :not_invertable}
-    end
+    defp error(), do: :erlang.nif_error(:nif_not_loaded)
   end
 end

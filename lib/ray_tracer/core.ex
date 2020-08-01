@@ -11,6 +11,10 @@ defmodule RayTracer.Core do
     Enum.zip(a, b) |> Enum.all?(fn {a, b} -> approx_eq(a, b) end)
   end
 
+  def approx_eq(%RayTracer.Matrix.Native{} = a, %RayTracer.Matrix.Native{} = b) do
+    RayTracer.Matrix.approx_eq(a, b)
+  end
+
   def approx_eq(a, b) when is_map(a) and is_map(b) do
     approx_eq(Map.to_list(a), Map.to_list(b))
   end

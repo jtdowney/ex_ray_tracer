@@ -2,7 +2,8 @@ defmodule RayTracer.MatrixTest do
   use ExUnit.Case
   use ExUnitProperties
 
-  import RayTracer.{Core, Matrix}
+  import RayTracer.Core
+  import RayTracer.Matrix, except: [approx_eq: 2]
 
   def matrix_gen do
     gen all a <- {StreamData.float(), StreamData.float(), StreamData.float()},
@@ -14,7 +15,6 @@ defmodule RayTracer.MatrixTest do
 
   test "Constructing and inspecting a 4x4 matrix" do
     m = matrix({{1, 2, 3, 4}, {5.5, 6.5, 7.5, 8.5}, {9, 10, 11, 12}, {13.5, 14.5, 15.5, 16.5}})
-    assert m.size == 4
     assert at(m, 0, 0) == 1
     assert at(m, 0, 3) == 4
     assert at(m, 1, 0) == 5.5
@@ -26,7 +26,6 @@ defmodule RayTracer.MatrixTest do
 
   test "A 2x2 matrix ought to be representable" do
     m = matrix({{-3, -5}, {1, -2}})
-    assert m.size == 2
     assert at(m, 0, 0) == -3
     assert at(m, 0, 1) == -5
     assert at(m, 1, 0) == 1
@@ -35,7 +34,6 @@ defmodule RayTracer.MatrixTest do
 
   test "A 3x3 matrix ought to be representable" do
     m = matrix({{-3, 5, 0}, {1, -2, -7}, {0, 1, 1}})
-    assert m.size == 3
     assert at(m, 0, 0) == -3
     assert at(m, 1, 1) == -2
     assert at(m, 2, 2) == 1
@@ -147,9 +145,9 @@ defmodule RayTracer.MatrixTest do
     b = inverse(a)
     assert determinant(a) == 532
     assert cofactor(a, 2, 3) == -160
-    assert at(b, 3, 2) == -160 / 532
+    assert approx_eq(at(b, 3, 2), -160 / 532)
     assert cofactor(a, 3, 2) == 105
-    assert at(b, 2, 3) == 105 / 532
+    assert approx_eq(at(b, 2, 3), 105 / 532)
 
     assert approx_eq(
              b,

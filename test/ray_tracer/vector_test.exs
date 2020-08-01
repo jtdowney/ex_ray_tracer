@@ -25,9 +25,9 @@ defmodule RayTracer.VectorTest do
   end
 
   property "Normalized vectors have magnitude of 1" do
-    check all x <- StreamData.float(),
-              y <- StreamData.float(),
-              z <- StreamData.float() do
+    check all x <- StreamData.float(min: -128, max: 128),
+              y <- StreamData.float(min: -128, max: 128),
+              z <- StreamData.float(min: -128, max: 128) do
       v = vector(x, y, z) |> normalize()
       assert_in_delta magnitude(v), 1, epsilon()
     end

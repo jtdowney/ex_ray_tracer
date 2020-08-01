@@ -18,15 +18,15 @@ defmodule RayTracer.TransformationTest do
   end
 
   property "Translation does not affect vectors" do
-    check all tx <- StreamData.float(),
-              ty <- StreamData.float(),
-              tz <- StreamData.float(),
-              vx <- StreamData.float(),
-              vy <- StreamData.float(),
-              vz <- StreamData.float() do
+    check all tx <- StreamData.float(min: -128, max: 128),
+              ty <- StreamData.float(min: -128, max: 128),
+              tz <- StreamData.float(min: -128, max: 128),
+              vx <- StreamData.float(min: -128, max: 128),
+              vy <- StreamData.float(min: -128, max: 128),
+              vz <- StreamData.float(min: -128, max: 128) do
       transform = translation(tx, ty, tz)
       v = vector(vx, vy, vz)
-      assert Matrix.mul(transform, v) == v
+      assert approx_eq(Matrix.mul(transform, v), v)
     end
   end
 
