@@ -6,7 +6,7 @@ defmodule RayTracer.World do
   defstruct [:light, objects: []]
 
   import RayTracer.Core
-  alias RayTracer.{Intersection, Material, Ray, Sphere, Vector}
+  alias RayTracer.{Intersection, Material, Ray, Shape, Vector}
 
   def world() do
     %RayTracer.World{}
@@ -17,7 +17,7 @@ defmodule RayTracer.World do
   end
 
   def intersect(%RayTracer.World{objects: objects}, r) do
-    Enum.flat_map(objects, &Sphere.intersect(&1, r)) |> Intersection.intersections()
+    Enum.flat_map(objects, &Shape.intersect(&1, r)) |> Intersection.intersections()
   end
 
   def shade_hit(%RayTracer.World{light: light} = world, comps) do

@@ -6,7 +6,7 @@ defmodule RayTracer.Intersection do
   defstruct [:t, :object]
 
   import RayTracer.Core
-  alias RayTracer.{Ray, Sphere, Vector}
+  alias RayTracer.{Ray, Shape, Vector}
 
   def intersection(t, object) do
     %RayTracer.Intersection{t: t, object: object}
@@ -23,7 +23,7 @@ defmodule RayTracer.Intersection do
   def prepare_computations(%RayTracer.Intersection{t: t, object: object}, ray) do
     point = Ray.position(ray, t)
     eyev = ray.direction |> negate
-    normalv = Sphere.normal_at(object, point)
+    normalv = Shape.normal_at(object, point)
 
     {inside, normalv} =
       if Vector.dot(normalv, eyev) < 0 do

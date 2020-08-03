@@ -2,7 +2,7 @@ defmodule RayTracer.CameraTest do
   use ExUnit.Case
 
   import RayTracer.{Core, Camera}
-  alias RayTracer.{Canvas, Light, Material, Matrix, Sphere, Transformation, World}
+  alias RayTracer.{Canvas, Light, Material, Matrix, Shapes.Sphere, Transformation, World}
 
   setup do
     light = Light.point_light(point(-10, 10, -10), color(1, 1, 1))

@@ -2,7 +2,7 @@ defmodule RayTracer.WorldTest do
   use ExUnit.Case
 
   import RayTracer.{Core, World}
-  alias RayTracer.{Intersection, Light, Material, Ray, Sphere, Transformation}
+  alias RayTracer.{Intersection, Light, Material, Ray, Shapes.Sphere, Transformation}
 
   setup do
     light = Light.point_light(point(-10, 10, -10), color(1, 1, 1))

@@ -1,5 +1,5 @@
 import RayTracer.Core
-alias RayTracer.{Canvas, Intersection, Light, Material, Ray, Sphere, Vector}
+alias RayTracer.{Canvas, Intersection, Light, Material, Ray, Shape, Shapes.Sphere, Vector}
 
 ray_origin = point(0, 0, -5)
 wall_z = 10
@@ -24,12 +24,12 @@ for x <- 0..(canvas_size - 1),
   position = point(world_x, world_y, wall_z)
   direction = sub(position, ray_origin) |> Vector.normalize()
   ray = Ray.ray(ray_origin, direction)
-  xs = Sphere.intersect(shape, ray)
+  xs = Shape.intersect(shape, ray)
   hit = Intersection.hit(xs)
 
   if hit do
     point = Ray.position(ray, hit.t)
-    normal = Sphere.normal_at(hit.object, point)
+    normal = Shape.normal_at(hit.object, point)
     eye = ray.direction |> negate()
 
     color = Material.lighting(hit.object.material, light, point, eye, normal)

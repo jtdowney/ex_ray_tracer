@@ -6,6 +6,7 @@ defmodule RayTracer.MixProject do
       app: :ray_tracer,
       version: "0.1.0",
       elixir: "~> 1.10",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       compilers: [:rustler] ++ Mix.compilers(),
       rustler_crates: rustler_crates(),
@@ -31,6 +32,9 @@ defmodule RayTracer.MixProject do
       {:stream_data, "~> 0.5.0", only: [:dev, :test]}
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp rustler_crates do
     [

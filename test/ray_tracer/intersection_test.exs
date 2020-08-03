@@ -2,7 +2,7 @@ defmodule RayTracer.IntersectionTest do
   use ExUnit.Case
 
   import RayTracer.{Core, Intersection}
-  alias RayTracer.{Ray, Sphere, Transformation}
+  alias RayTracer.{Ray, Shapes.Sphere, Transformation}
 
   test "An intersection encapsulates t and object" do
     s = Sphere.sphere()

@@ -1,5 +1,5 @@
 import RayTracer.Core
-alias RayTracer.{Camera, Canvas, Light, Material, Transformation, Sphere, World}
+alias RayTracer.{Camera, Canvas, Light, Material, Transformation, Shapes.Sphere, World}
 
 t = Transformation.scaling(10, 0.01, 10)
 m = Material.material() |> Map.put(:color, color(1, 0.9, 0.9)) |> Map.put(:specular, 0)

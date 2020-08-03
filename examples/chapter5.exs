@@ -1,5 +1,5 @@
 import RayTracer.Core
-alias RayTracer.{Canvas, Intersection, Ray, Sphere, Vector}
+alias RayTracer.{Canvas, Intersection, Ray, Shape, Shapes.Sphere, Vector}
 
 ray_origin = point(0, 0, -5)
 wall_z = 10
@@ -19,7 +19,7 @@ for x <- 0..(canvas_size - 1),
   position = point(world_x, world_y, wall_z)
   direction = sub(position, ray_origin) |> Vector.normalize()
   ray = Ray.ray(ray_origin, direction)
-  xs = Sphere.intersect(shape, ray)
+  xs = Shape.intersect(shape, ray)
   hit = Intersection.hit(xs)
   {x, y, hit}
 end
