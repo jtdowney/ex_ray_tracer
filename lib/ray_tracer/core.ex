@@ -3,6 +3,12 @@ defmodule RayTracer.Core do
   Core constructors and utilities for ray tracing.
   """
 
+  @epsilon 0.00001
+
+  defmacro epsilon() do
+    @epsilon
+  end
+
   def approx_eq(a, b) when is_number(a) and is_number(b) do
     abs(a - b) <= epsilon()
   end
@@ -25,10 +31,6 @@ defmodule RayTracer.Core do
 
   def approx_eq(a, b) do
     a == b
-  end
-
-  def epsilon() do
-    0.00001
   end
 
   def tuple(x, y, z, w) do
