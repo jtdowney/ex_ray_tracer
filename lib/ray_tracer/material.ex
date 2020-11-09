@@ -3,17 +3,31 @@ defmodule RayTracer.Material do
   Material for an object.
   """
 
-  alias RayTracer.Vector
+  alias RayTracer.{Pattern, Vector}
   import RayTracer.Core
 
-  defstruct color: color(1, 1, 1), ambient: 0.1, diffuse: 0.9, specular: 0.9, shininess: 200
+  defstruct [
+    :pattern,
+    color: color(1, 1, 1),
+    ambient: 0.1,
+    diffuse: 0.9,
+    specular: 0.9,
+    shininess: 200
+  ]
 
   def material() do
     %RayTracer.Material{}
   end
 
-  def lighting(m, light, point, eyev, normalv, in_shadow \\ false) do
-    effective_color = hadamard_product(m.color, light.intensity)
+  def lighting(m, object, light, point, eyev, normalv, in_shadow \\ false) do
+    color =
+      if m.pattern do
+        Pattern.pattern_at_shape(m.pattern, object, point)
+      else
+        m.color
+      end
+
+    effective_color = hadamard_product(color, light.intensity)
     lightv = sub(light.position, point) |> Vector.normalize()
     ambient = scalar_mul(effective_color, m.ambient)
     light_dot_normal = Vector.dot(lightv, normalv)

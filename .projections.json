@@ -1,0 +1,4 @@
+{
+  "lib/*.ex": {"alternate": "test/{}.exs"},
+  "test/*.exs": {"alternate": "lib/{}.ex"}
+}

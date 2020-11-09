@@ -25,6 +25,7 @@ defmodule RayTracer.World do
 
     Material.lighting(
       comps.object.material,
+      comps.object,
       light,
       comps.point,
       comps.eyev,
